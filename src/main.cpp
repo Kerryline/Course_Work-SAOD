@@ -1,6 +1,7 @@
 #include "database.h"
 #include "sort.h"
 #include "display.h"
+#include "search.h"  // ДОБАВИЛИ
 
 int main() {
     std::vector<Record> db = loadDatabase("testBase1.dat");

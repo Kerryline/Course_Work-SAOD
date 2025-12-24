@@ -6,6 +6,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/coursework.dir/src/display.cpp.o.d"
   "CMakeFiles/coursework.dir/src/main.cpp.o"
   "CMakeFiles/coursework.dir/src/main.cpp.o.d"
+  "CMakeFiles/coursework.dir/src/search.cpp.o"
+  "CMakeFiles/coursework.dir/src/search.cpp.o.d"
   "CMakeFiles/coursework.dir/src/sort.cpp.o"
   "CMakeFiles/coursework.dir/src/sort.cpp.o.d"
   "coursework"

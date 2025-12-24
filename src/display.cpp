@@ -1,4 +1,5 @@
 #include "display.h"
+#include "search.h"
 #include <random>
 #include <cstdlib>
 #include <iostream>
@@ -107,6 +108,7 @@ void displayMenu(const std::vector<Record>& original, const std::vector<Record*>
                   << "3. Случайная запись\n"
                   << "4. Запись по номеру\n"
                   << "5. Вся отсортированная БД\n"
+                  << "6. Двоичный поиск и очередь\n"
                   << "0. Выход\n"
                   << "Ваш выбор: ";
         std::cin >> choice;
@@ -144,6 +146,8 @@ void displayMenu(const std::vector<Record>& original, const std::vector<Record*>
             }
             std::cout << "\nНажмите Enter...";
             std::cin.get();
+        } else if (choice == 6) {  // ДВОИЧНЫЙ ПОИСК И ОЧЕРЕДЬ
+            searchAndDisplayQueue(sorted_indices);
         }
     } while (choice != 0);
 
