@@ -1,0 +1,3 @@
+/home/kerrline/Course_Work-SAOD/build/CMakeFiles/coursework.dir
+/home/kerrline/Course_Work-SAOD/build/CMakeFiles/edit_cache.dir
+/home/kerrline/Course_Work-SAOD/build/CMakeFiles/rebuild_cache.dir
