@@ -98,17 +98,91 @@ void displayAllOnePage(const std::vector<Record*>& data, const std::string& titl
     std::cin.get();
 }
 
-void displayMenu(const std::vector<Record>& original, const std::vector<Record*>& sorted_indices) {
+void displayQueue(const Queue& q, const std::string& title) {
+    system("clear");
+    std::cout << title << std::endl << std::endl;
+    
+    std::cout << "┌─────────────────────────────────────────────┐\n";
+    std::cout << "│           СТАТИСТИКА ОЧЕРЕДИ               │\n";
+    std::cout << "├─────────────────────────────────────────────┤\n";
+    std::cout << "│ Размер очереди: " << std::setw(27) << q.size << " │\n";
+    std::cout << "└─────────────────────────────────────────────┘\n\n";
+    
+    if (q.size == 0) {
+        std::cout << "Очередь пуста.\n";
+        std::cout << "\nНажмите Enter для возврата...";
+        std::cin.get();
+        return;
+    }
+
+    std::cout << "┌─────────────┬──────────────────────────────────┬────────────────────┬──────────┬──────────┐" << std::endl;
+    std::cout << "│ " << std::left << std::setw(12) << "Автор" << " │ "
+              << std::setw(32) << "Заголовок" << " │ "
+              << std::setw(17) << "Издательство" << " │ "
+              << std::setw(7) << "Год" << " │ "
+              << std::setw(7) << "Страниц" << " │" << std::endl;
+    std::cout << "├─────────────┼──────────────────────────────────┼────────────────────┼──────────┼──────────┤" << std::endl;
+
+    QueueNode* current = q.front;
+    int counter = 0;
+    
+    while (current != nullptr) {
+        Record* rec = current->data;
+        std::cout << "│ " << std::left << std::setw(12) << convertToUTF8(rec->author, 12) << " │ "
+                  << std::setw(32) << convertToUTF8(rec->title, 32) << " │ "
+                  << std::setw(17) << convertToUTF8(rec->publisher, 16) << " │ "
+                  << std::setw(7) << rec->year << " │ "
+                  << std::setw(7) << rec->pages << " │" << std::endl;
+        current = current->next;
+        counter++;
+        
+        if (counter % 20 == 0 && current != nullptr) {
+            std::cout << "└─────────────┴──────────────────────────────────┴────────────────────┴──────────┴──────────┘" << std::endl;
+            std::cout << "\nПоказано " << counter << " из " << q.size << " записей. ";
+            std::cout << "Нажмите Enter для продолжения...";
+            std::cin.get();
+            
+            system("clear");
+            std::cout << title << std::endl << std::endl;
+            std::cout << "┌─────────────┬──────────────────────────────────┬────────────────────┬──────────┬──────────┐" << std::endl;
+            std::cout << "│ " << std::left << std::setw(12) << "Автор" << " │ "
+                      << std::setw(32) << "Заголовок" << " │ "
+                      << std::setw(17) << "Издательство" << " │ "
+                      << std::setw(7) << "Год" << " │ "
+                      << std::setw(7) << "Страниц" << " │" << std::endl;
+            std::cout << "├─────────────┼──────────────────────────────────┼────────────────────┼──────────┼──────────┤" << std::endl;
+        }
+    }
+
+    std::cout << "└─────────────┴──────────────────────────────────┴────────────────────┴──────────┴──────────┘" << std::endl;
+    
+    std::cout << "\n┌─────────────────────────────────────────────┐\n";
+    std::cout << "│             ИТОГИ ПОИСКА                  │\n";
+    std::cout << "├─────────────────────────────────────────────┤\n";
+    std::cout << "│ Всего найдено записей: " << std::setw(21) << q.size << " │\n";
+    std::cout << "│ Показано записей: " << std::setw(25) << counter << " │\n";
+    std::cout << "└─────────────────────────────────────────────┘\n";
+    
+    std::cout << "\nНажмите Enter для возврата в меню...";
+    std::cin.get();
+}
+
+void displayMainMenu(const std::vector<Record>& original, 
+                     const std::vector<Record*>& sorted_indices,
+                     Queue*& currentQueue,
+                     OptimalSearchTree*& optimalTree) {
     int choice;
     do {
         system("clear");
-        std::cout << "=== Главное меню ===\n"
+        std::cout << "=== ГЛАВНОЕ МЕНЮ ===\n"
                   << "1. Исходная БД\n"
                   << "2. Отсортированная БД\n"
                   << "3. Случайная запись\n"
                   << "4. Запись по номеру\n"
                   << "5. Вся отсортированная БД\n"
-                  << "6. Двоичный поиск и очередь\n"
+                  << "6. Двоичный поиск по фамилии (первые 3 буквы)\n"
+                  << "7. Построить дерево из результатов поиска\n"
+                  << "8. Работа с деревом оптимального поиска\n"
                   << "0. Выход\n"
                   << "Ваш выбор: ";
         std::cin >> choice;
@@ -118,11 +192,14 @@ void displayMenu(const std::vector<Record>& original, const std::vector<Record*>
             std::vector<Record*> orig_indices;
             for (const auto& rec : original) orig_indices.push_back(const_cast<Record*>(&rec));
             displayInteractive(orig_indices, "ИСХОДНАЯ БАЗА ДАННЫХ");
-        } else if (choice == 2) {
+        } 
+        else if (choice == 2) {
             displayInteractive(sorted_indices, "ОТСОРТИРОВАННАЯ БАЗА ДАННЫХ");
-        } else if (choice == 5) {
+        } 
+        else if (choice == 5) {
             displayAllOnePage(sorted_indices, "ВСЯ ОТСОРТИРОВАННАЯ БАЗА ДАННЫХ ОДНОЙ СТРАНИЦЕЙ");
-        } else if (choice == 3) {
+        } 
+        else if (choice == 3) {
             std::random_device rd;
             std::mt19937 gen(rd());
             std::uniform_int_distribution<> dis(0, original.size() - 1);
@@ -132,7 +209,8 @@ void displayMenu(const std::vector<Record>& original, const std::vector<Record*>
             displayPage(single, 0, 1, "СЛУЧАЙНАЯ ЗАПИСЬ");
             std::cout << "\nНажмите Enter...";
             std::cin.get();
-        } else if (choice == 4) {
+        } 
+        else if (choice == 4) {
             int num;
             system("clear");
             std::cout << "Введите номер записи (0 — " << original.size() - 1 << "): ";
@@ -146,8 +224,62 @@ void displayMenu(const std::vector<Record>& original, const std::vector<Record*>
             }
             std::cout << "\nНажмите Enter...";
             std::cin.get();
-        } else if (choice == 6) {  // ДВОИЧНЫЙ ПОИСК И ОЧЕРЕДЬ
-            searchAndDisplayQueue(sorted_indices);
+        } 
+        else if (choice == 6) {
+            system("clear");
+            std::string prefix;
+            std::cout << "Введите первые 3 буквы фамилии (на русском): ";
+            std::getline(std::cin, prefix);
+            
+            clearQueue(*currentQueue);
+            
+            Queue tempQueue = binarySearchWithIndexing(sorted_indices, prefix);
+            
+            QueueNode* current = tempQueue.front;
+            while (current != nullptr) {
+                enqueue(*currentQueue, current->data);
+                current = current->next;
+            }
+            
+            if (currentQueue->size == 0) {
+                std::cout << "\nЗаписей с префиксом '" << prefix << "' не найдено.\n";
+                std::cout << "\nНажмите Enter...";
+                std::cin.get();
+            } else {
+                displayQueue(*currentQueue, "РЕЗУЛЬТАТЫ ДВОИЧНОГО ПОИСКА (очередь)");
+                
+                if (optimalTree != nullptr) {
+                    clearOptimalTree(optimalTree);
+                    optimalTree = nullptr;
+                }
+            }
+        } 
+        else if (choice == 7) {
+            if (currentQueue->size == 0) {
+                std::cout << "Очередь пуста! Сначала выполните поиск (пункт 6).\n";
+                std::cout << "\nНажмите Enter...";
+                std::cin.get();
+            } else {
+                if (optimalTree != nullptr) {
+                    clearOptimalTree(optimalTree);
+                }
+                
+                optimalTree = buildOptimalSearchTreeA1(*currentQueue);
+                
+                std::cout << "\nДерево оптимального поиска построено!\n";
+                std::cout << "Ключ дерева: " << optimalTree->keyType << "\n";
+                std::cout << "\nНажмите Enter...";
+                std::cin.get();
+            }
+        } 
+        else if (choice == 8) {
+            if (optimalTree == nullptr) {
+                std::cout << "Дерево не построено! Сначала постройте дерево (пункт 7).\n";
+                std::cout << "\nНажмите Enter...";
+                std::cin.get();
+            } else {
+                displayOptimalTreeMenu(optimalTree);
+            }
         }
     } while (choice != 0);
 

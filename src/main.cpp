@@ -1,7 +1,9 @@
 #include "database.h"
 #include "sort.h"
 #include "display.h"
-#include "search.h"  // ДОБАВИЛИ
+#include "search.h"
+#include "queue.h"
+#include "tree.h"
 
 int main() {
     std::vector<Record> db = loadDatabase("testBase1.dat");
@@ -17,7 +19,19 @@ int main() {
 
     quickSortHoare(indices, 0, indices.size() - 1);
 
-    displayMenu(db, indices);
+    Queue* currentQueue = new Queue;
+    initQueue(*currentQueue);
+    
+    OptimalSearchTree* optimalTree = nullptr;
+
+    displayMainMenu(db, indices, currentQueue, optimalTree);
+
+    clearQueue(*currentQueue);
+    delete currentQueue;
+    
+    if (optimalTree != nullptr) {
+        clearOptimalTree(optimalTree);
+    }
 
     return 0;
 }

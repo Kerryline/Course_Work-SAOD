@@ -61,15 +61,20 @@ std::string extractSurname(const Record& rec) {
 
     return convertToUTF8(surname_raw.c_str(), surname_raw.size());
 }
+
 int customCompare(const std::string& a, const std::string& b) {
-    // Пробуем использовать локаль для русских букв
     try {
         std::locale loc("ru_RU.UTF-8");
         const std::collate<char>& col = std::use_facet<std::collate<char>>(loc);
         return col.compare(a.data(), a.data() + a.size(), b.data(), b.data() + b.size());
     } catch (...) {
-        // Если локаль недоступна, сравниваем побайтово (для CP866/UTF-8)
-        // В CP866 русские буквы идут в порядке А-Я
-        return a.compare(b);
+        size_t len = std::min(a.size(), b.size());
+        for (size_t i = 0; i < len; ++i) {
+            if (static_cast<unsigned char>(a[i]) < static_cast<unsigned char>(b[i])) return -1;
+            if (static_cast<unsigned char>(a[i]) > static_cast<unsigned char>(b[i])) return 1;
+        }
+        if (a.size() < b.size()) return -1;
+        if (a.size() > b.size()) return 1;
+        return 0;
     }
 }

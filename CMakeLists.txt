@@ -10,5 +10,7 @@ add_executable(coursework
     src/database.cpp 
     src/sort.cpp 
     src/display.cpp 
-    src/search.cpp
+    src/search.cpp 
+    src/queue.cpp
+    src/tree.cpp
 )

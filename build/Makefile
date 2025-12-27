@@ -201,6 +201,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/queue.o: src/queue.cpp.o
+.PHONY : src/queue.o
+
+# target to build an object file
+src/queue.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/queue.cpp.o
+.PHONY : src/queue.cpp.o
+
+src/queue.i: src/queue.cpp.i
+.PHONY : src/queue.i
+
+# target to preprocess a source file
+src/queue.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/queue.cpp.i
+.PHONY : src/queue.cpp.i
+
+src/queue.s: src/queue.cpp.s
+.PHONY : src/queue.s
+
+# target to generate assembly for a file
+src/queue.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/queue.cpp.s
+.PHONY : src/queue.cpp.s
+
 src/search.o: src/search.cpp.o
 .PHONY : src/search.o
 
@@ -249,6 +273,30 @@ src/sort.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/sort.cpp.s
 .PHONY : src/sort.cpp.s
 
+src/tree.o: src/tree.cpp.o
+.PHONY : src/tree.o
+
+# target to build an object file
+src/tree.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/tree.cpp.o
+.PHONY : src/tree.cpp.o
+
+src/tree.i: src/tree.cpp.i
+.PHONY : src/tree.i
+
+# target to preprocess a source file
+src/tree.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/tree.cpp.i
+.PHONY : src/tree.cpp.i
+
+src/tree.s: src/tree.cpp.s
+.PHONY : src/tree.s
+
+# target to generate assembly for a file
+src/tree.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/tree.cpp.s
+.PHONY : src/tree.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -267,12 +315,18 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/queue.o"
+	@echo "... src/queue.i"
+	@echo "... src/queue.s"
 	@echo "... src/search.o"
 	@echo "... src/search.i"
 	@echo "... src/search.s"
 	@echo "... src/sort.o"
 	@echo "... src/sort.i"
 	@echo "... src/sort.s"
+	@echo "... src/tree.o"
+	@echo "... src/tree.i"
+	@echo "... src/tree.s"
 .PHONY : help
 
 
