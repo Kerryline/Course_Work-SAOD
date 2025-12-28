@@ -7,6 +7,7 @@
 #include <cmath>
 #include <climits>
 #include <functional>
+
 TreeNode* createTreeNode(const std::string& key, Record* record, int weight) {
     TreeNode* node = new TreeNode;
     node->key = key;
@@ -27,6 +28,11 @@ std::map<std::string, int> countKeyWeights(Queue& queue) {
         size_t end = key.find_last_not_of(' ');
         if (end != std::string::npos) key = key.substr(0, end + 1);
         
+        key.erase(std::remove(key.begin(), key.end(), '\0'), key.end());
+        key.erase(std::remove(key.begin(), key.end(), '\r'), key.end());
+        key.erase(std::remove(key.begin(), key.end(), '\n'), key.end());
+        key.erase(std::remove(key.begin(), key.end(), '\t'), key.end());
+        
         weights[key]++;
         current = current->next;
     }
@@ -38,7 +44,11 @@ std::vector<std::pair<std::string, int>> createSortedKeyList(const std::map<std:
     std::vector<std::pair<std::string, int>> keyList;
     
     for (const auto& pair : weights) {
-        keyList.push_back(pair);
+        std::string cleanKey = pair.first;
+        cleanKey.erase(std::remove(cleanKey.begin(), cleanKey.end(), '\0'), cleanKey.end());
+        cleanKey.erase(std::remove(cleanKey.begin(), cleanKey.end(), '\r'), cleanKey.end());
+        cleanKey.erase(std::remove(cleanKey.begin(), cleanKey.end(), '\n'), cleanKey.end());
+        keyList.push_back({cleanKey, pair.second});
     }
     
     std::sort(keyList.begin(), keyList.end(),
@@ -121,6 +131,11 @@ OptimalSearchTree* buildOptimalSearchTreeA1(Queue& queue) {
         size_t end = key.find_last_not_of(' ');
         if (end != std::string::npos) key = key.substr(0, end + 1);
         
+        key.erase(std::remove(key.begin(), key.end(), '\0'), key.end());
+        key.erase(std::remove(key.begin(), key.end(), '\r'), key.end());
+        key.erase(std::remove(key.begin(), key.end(), '\n'), key.end());
+        key.erase(std::remove(key.begin(), key.end(), '\t'), key.end());
+        
         recordsMap[key].push_back(current->data);
         current = current->next;
     }
@@ -131,7 +146,12 @@ OptimalSearchTree* buildOptimalSearchTreeA1(Queue& queue) {
     std::cout << "┌────────────────────┬────────┐\n";
     std::cout << "│ Автор              │ Вес    │\n";
     std::cout << "├────────────────────┼────────┤\n";
+    int count = 0;
     for (const auto& pair : keyList) {
+        if (count++ >= 15) {
+            std::cout << "│ ...               │ ...    │\n";
+            break;
+        }
         std::cout << "│ " << std::left << std::setw(20) << pair.first << " │ "
                   << std::setw(6) << pair.second << " │\n";
     }
@@ -175,7 +195,6 @@ TreeNode* searchInOptimalTree(TreeNode* root, const std::string& key, int& compa
     comparisons++;
     if (key == root->key) {
         root->weight++;
-        std::cout << "  Найдено! Вес увеличен: " << root->weight << "\n";
         return root;
     }
     
@@ -187,34 +206,45 @@ TreeNode* searchInOptimalTree(TreeNode* root, const std::string& key, int& compa
     }
 }
 
-TreeNode* searchInOptimalTree(OptimalSearchTree* tree, const std::string& key) {
+TreeNode* searchInOptimalTree(OptimalSearchTree* tree, const std::string& author) {
     if (tree == nullptr) return nullptr;
     
-    std::cout << "\n[ПОИСК В ДОП] Ключ: '" << key << "'\n";
-    int comparisons = 0;
-    TreeNode* result = searchInOptimalTree(tree->root, key, comparisons);
+    std::string searchKey = author;
     
-    std::cout << "  Выполнено сравнений: " << comparisons << "\n";
-    std::cout << "  Уровень найденной вершины: ";
-    
-    TreeNode* current = tree->root;
-    int level = 1;
-    while (current != nullptr && current != result) {
-        if (key < current->key) {
-            current = current->left;
-        } else {
-            current = current->right;
-        }
-        level++;
+    size_t start = searchKey.find_first_not_of(" \t\n\r");
+    if (start != std::string::npos) {
+        size_t end = searchKey.find_last_not_of(" \t\n\r");
+        searchKey = searchKey.substr(start, end - start + 1);
     }
+    
+    std::replace(searchKey.begin(), searchKey.end(), '_', ' ');
+    searchKey.erase(std::remove(searchKey.begin(), searchKey.end(), '\0'), searchKey.end());
+    
+    int comparisons = 0;
+    TreeNode* result = searchInOptimalTree(tree->root, searchKey, comparisons);
+    
+    std::cout << "\n[ПОИСК В ДОП] Ключ: '" << searchKey << "'\n";
+    std::cout << "  Выполнено сравнений: " << comparisons << "\n";
     
     if (result != nullptr) {
-        std::cout << level << " (hi=" << level << ", Wi=" << result->weight << ")\n";
+        TreeNode* current = tree->root;
+        int level = 1;
+        while (current != nullptr && current != result) {
+            if (searchKey < current->key) {
+                current = current->left;
+            } else {
+                current = current->right;
+            }
+            level++;
+        }
+        
+        std::cout << "  Уровень найденной вершины: " << level 
+                  << " (hi=" << level << ", Wi=" << result->weight << ")\n";
+        return result;
     } else {
-        std::cout << "не найдено\n";
+        std::cout << "  ✗ Не найдено\n";
+        return nullptr;
     }
-    
-    return result;
 }
 
 void printTreeHorizontal(TreeNode* root, int depth, const std::string& indent, bool last) {
@@ -454,7 +484,7 @@ void displayOptimalTreeMenu(OptimalSearchTree* tree) {
                 system("clear");
                 std::string author;
                 std::cout << "ПОИСК АВТОРА В ДЕРЕВЕ ОПТИМАЛЬНОГО ПОИСКА\n\n";
-                std::cout << "Введите фамилию автора: ";
+                std::cout << "Введите имя автора (формат: 'Архипов В К' или 'Архипов_В_К'): ";
                 std::getline(std::cin, author);
                 
                 TreeNode* found = searchInOptimalTree(tree, author);
