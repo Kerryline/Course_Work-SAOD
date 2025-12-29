@@ -18,6 +18,51 @@ TreeNode* createTreeNode(const std::string& key, Record* record, int weight) {
     return node;
 }
 
+std::string extractSurnameFromAuthor(const std::string& author) {
+    std::string surname = author;
+    size_t start = surname.find_first_not_of(" \t\n\r");
+    if (start != std::string::npos) {
+        size_t end = surname.find_last_not_of(" \t\n\r");
+        surname = surname.substr(start, end - start + 1);
+    }
+    
+    size_t space_pos = surname.find(' ');
+    if (space_pos != std::string::npos) {
+        surname = surname.substr(0, space_pos);
+    }
+    
+    size_t underscore_pos = surname.find('_');
+    if (underscore_pos != std::string::npos) {
+        surname = surname.substr(0, underscore_pos);
+    }
+    
+    return surname;
+}
+
+// -------------------------------------------------------------------
+// АЛГОРИТМ A1: Построение дерева оптимального поиска
+// -------------------------------------------------------------------
+// Псевдокод из лекции:
+// Вход: Упорядоченный список ключей K[1..n] с весами W[1..n]
+// Выход: Дерево оптимального поиска
+// 
+// function BuildA1(K, W, start, end):
+//   if start > end: return nullptr
+//   // 1. Найти вершину с максимальным весом
+//   maxIndex = start
+//   for i = start+1 to end:
+//     if W[i] > W[maxIndex]:
+//       maxIndex = i
+//   // 2. Создать корень с этой вершиной
+//   root = CreateNode(K[maxIndex], W[maxIndex])
+//   // 3. Рекурсивно построить левое поддерево
+//   root.left = BuildA1(K, W, start, maxIndex-1)
+//   // 4. Рекурсивно построить правое поддерево
+//   root.right = BuildA1(K, W, maxIndex+1, end)
+//   return root
+// -------------------------------------------------------------------
+
+// Шаг 1: Подсчет весов ключей
 std::map<std::string, int> countKeyWeights(Queue& queue) {
     std::map<std::string, int> weights;
     QueueNode* current = queue.front;
@@ -40,6 +85,7 @@ std::map<std::string, int> countKeyWeights(Queue& queue) {
     return weights;
 }
 
+// Шаг 2: Создание упорядоченного списка ключей
 std::vector<std::pair<std::string, int>> createSortedKeyList(const std::map<std::string, int>& weights) {
     std::vector<std::pair<std::string, int>> keyList;
     
@@ -59,6 +105,7 @@ std::vector<std::pair<std::string, int>> createSortedKeyList(const std::map<std:
     return keyList;
 }
 
+// Функция поиска индекса с максимальным весом (Шаг 1 из псевдокода)
 int findMaxWeightIndex(const std::vector<std::pair<std::string, int>>& keyList, int start, int end) {
     if (start > end) return -1;
     
@@ -75,55 +122,46 @@ int findMaxWeightIndex(const std::vector<std::pair<std::string, int>>& keyList, 
     return maxIndex;
 }
 
+// РЕАЛИЗАЦИЯ АЛГОРИТМА A1 для построения ДОП
 TreeNode* buildTreeA1Recursive(const std::vector<std::pair<std::string, int>>& keyList, 
                               std::map<std::string, std::vector<Record*>>& recordsMap,
                               int start, int end) {
+    // Базовый случай
     if (start > end) return nullptr;
     
+    // Шаг 1: Найти вершину с максимальным весом
     int maxIndex = findMaxWeightIndex(keyList, start, end);
     if (maxIndex == -1) return nullptr;
     
+    // Шаг 2: Создать корень с этой вершиной
     TreeNode* root = createTreeNode(keyList[maxIndex].first, 
                                    recordsMap[keyList[maxIndex].first][0],
                                    keyList[maxIndex].second);
     
     root->records = recordsMap[keyList[maxIndex].first];
     
+    // Шаг 3: Рекурсивно построить левое поддерево
     root->left = buildTreeA1Recursive(keyList, recordsMap, start, maxIndex - 1);
     
+    // Шаг 4: Рекурсивно построить правое поддерево
     root->right = buildTreeA1Recursive(keyList, recordsMap, maxIndex + 1, end);
     
     return root;
 }
 
-double calculateWeightedHeight(TreeNode* root, int depth, int& totalWeightedHeight, int& totalWeight) {
-    if (root == nullptr) return 0.0;
-    
-    int level = depth + 1;
-    
-    totalWeightedHeight += root->weight * level;
-    totalWeight += root->weight;
-    
-    calculateWeightedHeight(root->left, depth + 1, totalWeightedHeight, totalWeight);
-    calculateWeightedHeight(root->right, depth + 1, totalWeightedHeight, totalWeight);
-    
-    if (depth == 0) {
-        return totalWeight > 0 ? (double)totalWeightedHeight / totalWeight : 0.0;
-    }
-    return 0.0;
-}
-
+// Основная функция построения ДОП по алгоритму A1
 OptimalSearchTree* buildOptimalSearchTreeA1(Queue& queue) {
     if (isEmpty(queue)) {
         std::cout << "Очередь пуста, дерево не построено\n";
         return nullptr;
     }
     
-    // Простое сообщение вместо всей таблицы
     std::cout << "\nПостроение дерева оптимального поиска (алгоритм A1)...\n";
     
+    // Подготовка данных: подсчет весов
     std::map<std::string, int> weights = countKeyWeights(queue);
     
+    // Создание карты записей для быстрого доступа
     std::map<std::string, std::vector<Record*>> recordsMap;
     QueueNode* current = queue.front;
     while (current != nullptr) {
@@ -140,13 +178,15 @@ OptimalSearchTree* buildOptimalSearchTreeA1(Queue& queue) {
         current = current->next;
     }
     
+    // Создание упорядоченного списка ключей
     std::vector<std::pair<std::string, int>> keyList = createSortedKeyList(weights);
     
+    // Построение дерева по алгоритму A1
     OptimalSearchTree* tree = new OptimalSearchTree;
     tree->root = buildTreeA1Recursive(keyList, recordsMap, 0, keyList.size() - 1);
     tree->totalKeys = keyList.size();
     tree->totalRecords = queue.size;
-    tree->keyType = "автор";
+    tree->keyType = "автор (дерево оптимального поиска, алгоритм A1)";
     
     std::cout << "Дерево построено. Уникальных ключей: " << tree->totalKeys 
               << ", записей: " << tree->totalRecords << "\n";
@@ -154,80 +194,134 @@ OptimalSearchTree* buildOptimalSearchTreeA1(Queue& queue) {
     return tree;
 }
 
-TreeNode* searchInOptimalTree(TreeNode* root, const std::string& key, int& comparisons) {
+// -------------------------------------------------------------------
+// ПОИСК В ДЕРЕВЕ ОПТИМАЛЬНОГО ПОИСКА
+// -------------------------------------------------------------------
+// Поиск в ДОП отличается от обычного бинарного поиска:
+// 1. Вес вершины увеличивается при каждом успешном поиске
+// 2. Дерево строится с учетом частот поиска
+// 3. Поиск может быть не бинарным, если ищем по частичному ключу
+// -------------------------------------------------------------------
+
+// Рекурсивный поиск по фамилии в дереве
+void searchBySurnameInTree(TreeNode* root, const std::string& surname, 
+                          std::vector<Record*>& results, int& comparisons) {
     if (root == nullptr) {
         comparisons++;
-        return nullptr;
+        return;
     }
     
     comparisons++;
-    if (key == root->key) {
-        root->weight++;
-        return root;
-    }
     
-    comparisons++;
-    if (key < root->key) {
-        return searchInOptimalTree(root->left, key, comparisons);
-    } else {
-        return searchInOptimalTree(root->right, key, comparisons);
-    }
-}
-
-TreeNode* searchInOptimalTree(OptimalSearchTree* tree, const std::string& author) {
-    if (tree == nullptr) return nullptr;
+    std::string nodeSurname = extractSurnameFromAuthor(root->key);
     
-    std::string searchKey = author;
-    
-    size_t start = searchKey.find_first_not_of(" \t\n\r");
-    if (start != std::string::npos) {
-        size_t end = searchKey.find_last_not_of(" \t\n\r");
-        searchKey = searchKey.substr(start, end - start + 1);
-    }
-    
-    std::replace(searchKey.begin(), searchKey.end(), '_', ' ');
-    searchKey.erase(std::remove(searchKey.begin(), searchKey.end(), '\0'), searchKey.end());
-    
-    int comparisons = 0;
-    TreeNode* result = searchInOptimalTree(tree->root, searchKey, comparisons);
-    
-    std::cout << "\n[ПОИСК В ДОП] Ключ: '" << searchKey << "'\n";
-    std::cout << "  Выполнено сравнений: " << comparisons << "\n";
-    
-    if (result != nullptr) {
-        TreeNode* current = tree->root;
-        int level = 1;
-        while (current != nullptr && current != result) {
-            if (searchKey < current->key) {
-                current = current->left;
-            } else {
-                current = current->right;
-            }
-            level++;
+    // Если фамилии совпадают, добавляем все записи этого автора
+    if (nodeSurname == surname) {
+        for (auto& rec : root->records) {
+            results.push_back(rec);
         }
-        
-        std::cout << "  Уровень найденной вершины: " << level 
-                  << " (hi=" << level << ", Wi=" << result->weight << ")\n";
-        return result;
-    } else {
-        std::cout << "  ✗ Не найдено\n";
-        return nullptr;
     }
+    
+    // Рекурсивный поиск в обоих поддеревьях
+    searchBySurnameInTree(root->left, surname, results, comparisons);
+    searchBySurnameInTree(root->right, surname, results, comparisons);
 }
 
-// Функции обходов дерева
+// Поиск в дереве оптимального поиска по фамилии автора
+std::vector<Record*> searchInOptimalTreeBySurname(OptimalSearchTree* tree, const std::string& surname) {
+    if (tree == nullptr || tree->root == nullptr) {
+        return std::vector<Record*>();
+    }
+    
+    // Очистка и нормализация входной строки
+    std::string searchSurname = surname;
+    
+    size_t start = searchSurname.find_first_not_of(" \t\n\r");
+    if (start != std::string::npos) {
+        size_t end = searchSurname.find_last_not_of(" \t\n\r");
+        searchSurname = searchSurname.substr(start, end - start + 1);
+    }
+    
+    std::replace(searchSurname.begin(), searchSurname.end(), '_', ' ');
+    searchSurname.erase(std::remove(searchSurname.begin(), searchSurname.end(), '\0'), searchSurname.end());
+    
+    size_t space_pos = searchSurname.find(' ');
+    if (space_pos != std::string::npos) {
+        searchSurname = searchSurname.substr(0, space_pos);
+    }
+    
+    // Поиск в дереве
+    std::vector<Record*> results;
+    int comparisons = 0;
+    
+    searchBySurnameInTree(tree->root, searchSurname, results, comparisons);
+    
+    // ОСОБЕННОСТЬ ДОП: увеличение веса найденных вершин
+    std::function<void(TreeNode*, const std::string&)> increaseWeight = 
+        [&increaseWeight](TreeNode* node, const std::string& surname) {
+            if (node == nullptr) return;
+            
+            std::string nodeSurname = extractSurnameFromAuthor(node->key);
+            if (nodeSurname == surname) {
+                node->weight++;  // УВЕЛИЧЕНИЕ ВЕСА - важная особенность ДОП
+            }
+            
+            increaseWeight(node->left, surname);
+            increaseWeight(node->right, surname);
+        };
+    
+    increaseWeight(tree->root, searchSurname);
+    
+    return results;
+}
+
+// -------------------------------------------------------------------
+// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// -------------------------------------------------------------------
+
+void displayRecordsTable(const std::vector<Record*>& records, const std::string& title) {
+    system("clear");
+    std::cout << title << std::endl << std::endl;
+    
+    if (records.empty()) {
+        std::cout << "Записей не найдено.\n";
+        return;
+    }
+    
+    std::cout << "┌─────────────┬──────────────────────────────────┬────────────────────┬──────────┬──────────┐" << std::endl;
+    std::cout << "│ " << std::left << std::setw(12) << "Автор" << " │ "
+              << std::setw(32) << "Заголовок" << " │ "
+              << std::setw(17) << "Издательство" << " │ "
+              << std::setw(7) << "Год" << " │ "
+              << std::setw(7) << "Страниц" << " │" << std::endl;
+    std::cout << "├─────────────┼──────────────────────────────────┼────────────────────┼──────────┼──────────┤" << std::endl;
+
+    for (size_t i = 0; i < records.size(); ++i) {
+        Record* rec = records[i];
+        std::cout << "│ " << std::left << std::setw(12) << convertToUTF8(rec->author, 12) << " │ "
+                  << std::setw(32) << convertToUTF8(rec->title, 32) << " │ "
+                  << std::setw(17) << convertToUTF8(rec->publisher, 16) << " │ "
+                  << std::setw(7) << rec->year << " │ "
+                  << std::setw(7) << rec->pages << " │" << std::endl;
+    }
+
+    std::cout << "└─────────────┴──────────────────────────────────┴────────────────────┴──────────┴──────────┘" << std::endl;
+    std::cout << "Всего записей: " << records.size() << std::endl;
+}
+
+// Обходы дерева для проверки структуры
 void inorderTraversal(TreeNode* root) {
     if (root == nullptr) return;
     
     inorderTraversal(root->left);
-    std::cout << root->key << " ";
+    std::cout << root->key << " (w=" << root->weight << ") ";
     inorderTraversal(root->right);
 }
 
 void preorderTraversal(TreeNode* root) {
     if (root == nullptr) return;
     
-    std::cout << root->key << " ";
+    std::cout << root->key << " (w=" << root->weight << ") ";
     preorderTraversal(root->left);
     preorderTraversal(root->right);
 }
@@ -237,7 +331,7 @@ void postorderTraversal(TreeNode* root) {
     
     postorderTraversal(root->left);
     postorderTraversal(root->right);
-    std::cout << root->key << " ";
+    std::cout << root->key << " (w=" << root->weight << ") ";
 }
 
 void displayTraversals(TreeNode* root) {
@@ -246,20 +340,20 @@ void displayTraversals(TreeNode* root) {
         return;
     }
     
-    std::cout << "\n=== ОБХОДЫ ДЕРЕВА ===\n\n";
+    std::cout << "\n=== ОБХОДЫ ДЕРЕВА ОПТИМАЛЬНОГО ПОИСКА ===\n\n";
     
-    std::cout << "1. Inorder (Л-К-П):\n";
-    std::cout << "   ";
+    std::cout << "Inorder (Л-К-П):\n";
+    std::cout << "  ";
     inorderTraversal(root);
     std::cout << "\n\n";
     
-    std::cout << "2. Preorder (К-Л-П):\n";
-    std::cout << "   ";
+    std::cout << "Preorder (К-Л-П):\n";
+    std::cout << "  ";
     preorderTraversal(root);
     std::cout << "\n\n";
     
-    std::cout << "3. Postorder (Л-П-К):\n";
-    std::cout << "   ";
+    std::cout << "Postorder (Л-П-К):\n";
+    std::cout << "  ";
     postorderTraversal(root);
     std::cout << "\n\n";
 }
@@ -301,47 +395,19 @@ void printTreeHorizontal(TreeNode* root) {
     printTreeHorizontal(root, 0, "", true);
 }
 
-void printTreeTable(TreeNode* root, int depth) {
-    if (root == nullptr) return;
-    
-    printTreeTable(root->left, depth + 1);
-    
-    int level = depth + 1;
-    std::cout << "│ " << std::left << std::setw(20) << root->key << " │ "
-              << std::setw(6) << root->weight << " │ "
-              << std::setw(4) << level << " │ "
-              << std::setw(8) << (root->weight * level) << " │ "
-              << std::setw(7) << root->records.size() << " │ ";
-    
-    std::string years;
-    for (size_t i = 0; i < root->records.size() && i < 2; i++) {
-        if (i > 0) years += ", ";
-        years += std::to_string(root->records[i]->year);
-    }
-    if (root->records.size() > 2) {
-        years += ", ...";
-    }
-    
-    std::cout << std::setw(20) << years << " │\n";
-    
-    printTreeTable(root->right, depth + 1);
-}
-
 void printOptimalTree(const OptimalSearchTree* tree) {
     if (tree == nullptr || tree->root == nullptr) {
         std::cout << "Дерево пусто или не построено\n";
         return;
     }
     
-    std::cout << "\n=== ДЕРЕВО ОПТИМАЛЬНОГО ПОИСКА ===\n";
-    std::cout << "Ключ поиска: " << tree->keyType << "\n";
+    std::cout << "\n=== ДЕРЕВО ОПТИМАЛЬНОГО ПОИСКА (алгоритм A1) ===\n";
+    std::cout << "Ключ: " << tree->keyType << "\n";
     std::cout << "Уникальных ключей: " << tree->totalKeys << "\n";
-    std::cout << "Всего записей: " << tree->totalRecords << "\n";
-    std::cout << "Алгоритм построения: A1 (вершина с max весом)\n\n";
+    std::cout << "Всего записей: " << tree->totalRecords << "\n\n";
     
-    std::cout << "ГОРИЗОНТАЛЬНОЕ ПРЕДСТАВЛЕНИЕ:\n";
+    std::cout << "Структура дерева (w - вес вершины, n - записей, L - уровень):\n";
     printTreeHorizontal(tree->root);
-    std::cout << "\n";
 }
 
 void clearTreeNodes(TreeNode* root) {
@@ -371,17 +437,14 @@ void displayOptimalTreeMenu(OptimalSearchTree* tree) {
     do {
         system("clear");
         std::cout << "=== МЕНЮ ДЕРЕВА ОПТИМАЛЬНОГО ПОИСКА ===\n\n";
+        std::cout << "Алгоритм построения: A1\n";
+        std::cout << "Ключ: автор\n";
+        std::cout << "Уникальных авторов: " << tree->totalKeys << "\n";
+        std::cout << "Всего записей: " << tree->totalRecords << "\n\n";
         
-        std::cout << "Информация о дереве:\n";
-        std::cout << "  Ключ: " << tree->keyType << "\n";
-        std::cout << "  Уникальных авторов: " << tree->totalKeys << "\n";
-        std::cout << "  Всего записей: " << tree->totalRecords << "\n";
-        std::cout << "  Алгоритм: A1 (корень - вершина с максимальным весом)\n\n";
-        
-        std::cout << "1. Вывести дерево (горизонтальный формат)\n";
-        std::cout << "2. Вывести отсортированную таблицу ключей\n";
-        std::cout << "3. Поиск автора в дереве (с увеличением веса)\n";
-        std::cout << "4. Показать обходы дерева (inorder, preorder, postorder)\n";
+        std::cout << "1. Вывести структуру дерева\n";
+        std::cout << "2. Показать обходы дерева\n";
+        std::cout << "3. Поиск по фамилии автора\n";
         std::cout << "0. Вернуться в главное меню\n";
         std::cout << "\nВаш выбор: ";
         std::cin >> choice;
@@ -391,64 +454,30 @@ void displayOptimalTreeMenu(OptimalSearchTree* tree) {
             case 1: {
                 system("clear");
                 printOptimalTree(tree);
-                std::cout << "\nНажмите Enter для продолжения...";
+                std::cout << "\nНажмите Enter...";
                 std::cin.get();
                 break;
             }
             
             case 2: {
                 system("clear");
-                std::cout << "ОТСОРТИРОВАННАЯ ТАБЛИЦА КЛЮЧЕЙ (inorder обход):\n";
-                std::cout << "┌────────────────────┬────────┬──────┬──────────┬─────────┬────────────────────┐\n";
-                std::cout << "│ Автор              │ Вес Wi │ Ур.  │ Wi*hi    │ Записей │ Годы изданий      │\n";
-                std::cout << "├────────────────────┼────────┼──────┼──────────┼─────────┼────────────────────┤\n";
-                printTreeTable(tree->root, 0);
-                std::cout << "└────────────────────┴────────┴──────┴──────────┴─────────┴────────────────────┘\n";
-                std::cout << "\nНажмите Enter для продолжения...";
+                displayTraversals(tree->root);
+                std::cout << "\nНажмите Enter...";
                 std::cin.get();
                 break;
             }
             
             case 3: {
                 system("clear");
-                std::string author;
-                std::cout << "ПОИСК АВТОРА В ДЕРЕВЕ ОПТИМАЛЬНОГО ПОИСКА\n\n";
-                std::cout << "Введите имя автора (формат: 'Архипов В К' или 'Архипов_В_К'): ";
-                std::getline(std::cin, author);
+                std::string surname;
+                std::cout << "ПОИСК ПО ФАМИЛИИ АВТОРА\n\n";
+                std::cout << "Введите фамилию автора: ";
+                std::getline(std::cin, surname);
                 
-                TreeNode* found = searchInOptimalTree(tree, author);
+                std::vector<Record*> foundRecords = searchInOptimalTreeBySurname(tree, surname);
                 
-                if (found != nullptr) {
-                    std::cout << "\n✓ НАЙДЕНО в дереве оптимального поиска!\n\n";
-                    std::cout << "Автор: " << found->key << "\n";
-                    std::cout << "Вес Wi: " << found->weight << " (увеличился на 1)\n";
-                    std::cout << "Количество книг: " << found->records.size() << "\n\n";
-                    
-                    std::cout << "Книги этого автора:\n";
-                    std::cout << "┌─────┬──────────────────────────────────┬─────────┬──────────┐\n";
-                    std::cout << "│ №   │ Заголовок                        │ Год     │ Страниц  │\n";
-                    std::cout << "├─────┼──────────────────────────────────┼─────────┼──────────┤\n";
-                    
-                    for (size_t i = 0; i < found->records.size(); i++) {
-                        Record* rec = found->records[i];
-                        std::cout << "│ " << std::setw(3) << (i + 1) << " │ "
-                                  << std::setw(32) << convertToUTF8(rec->title, 32) << " │ "
-                                  << std::setw(7) << rec->year << " │ "
-                                  << std::setw(8) << rec->pages << " │\n";
-                    }
-                    std::cout << "└─────┴──────────────────────────────────┴─────────┴──────────┘\n";
-                } else {
-                    std::cout << "\n✗ Автор '" << author << "' не найден в дереве\n";
-                }
+                displayRecordsTable(foundRecords, "РЕЗУЛЬТАТЫ ПОИСКА ПО ФАМИЛИИ: " + surname);
                 
-                std::cout << "\nНажмите Enter...";
-                std::cin.get();
-                break;
-            }
-            
-            case 4: {
-                system("clear");
-                displayTraversals(tree->root);
                 std::cout << "\nНажмите Enter...";
                 std::cin.get();
                 break;
