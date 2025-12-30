@@ -16,11 +16,7 @@ void displayPage(const std::vector<Record*>& data, int page, int per_page, const
     std::cout << title << std::endl << std::endl;
 
     std::cout << "┌─────────────┬──────────────────────────────────┬────────────────────┬──────────┬──────────┐" << std::endl;
-    std::cout << "│ " << std::left << std::setw(12) << "Автор" << " │ "
-              << std::setw(32) << "Заголовок" << " │ "
-              << std::setw(17) << "Издательство" << " │ "
-              << std::setw(7) << "Год" << " │ "
-              << std::setw(7) << "Страниц" << " │" << std::endl;
+    std::cout << "│ Автор       │ Заголовок                        │ Издательство       │ Год      │ Страниц  │" << std::endl;
     std::cout << "├─────────────┼──────────────────────────────────┼────────────────────┼──────────┼──────────┤" << std::endl;
 
     for (int idx = start; idx < end; ++idx) {
@@ -77,11 +73,7 @@ void displayAllOnePage(const std::vector<Record*>& data, const std::string& titl
     std::cout << title << std::endl << std::endl;
 
     std::cout << "┌─────────────┬──────────────────────────────────┬────────────────────┬──────────┬──────────┐" << std::endl;
-    std::cout << "│ " << std::left << std::setw(12) << "Автор" << " │ "
-              << std::setw(32) << "Заголовок" << " │ "
-              << std::setw(17) << "Издательство" << " │ "
-              << std::setw(7) << "Год" << " │ "
-              << std::setw(7) << "Страниц" << " │" << std::endl;
+    std::cout << "│ Автор       │ Заголовок                        │ Издательство       │ Год      │ Страниц  │" << std::endl;
     std::cout << "├─────────────┼──────────────────────────────────┼────────────────────┼──────────┼──────────┤" << std::endl;
 
     for (size_t i = 0; i < data.size(); ++i) {
@@ -103,11 +95,7 @@ void displayQueue(const Queue& q, const std::string& title) {
     system("clear");
     std::cout << title << std::endl << std::endl;
     
-    std::cout << "┌─────────────────────────────────────────────┐\n";
-    std::cout << "│           СТАТИСТИКА ОЧЕРЕДИ               │\n";
-    std::cout << "├─────────────────────────────────────────────┤\n";
-    std::cout << "│ Размер очереди: " << std::setw(27) << q.size << " │\n";
-    std::cout << "└─────────────────────────────────────────────┘\n\n";
+    std::cout << "Размер очереди: " << q.size << "\n\n";
     
     if (q.size == 0) {
         std::cout << "Очередь пуста.\n";
@@ -117,11 +105,7 @@ void displayQueue(const Queue& q, const std::string& title) {
     }
 
     std::cout << "┌─────────────┬──────────────────────────────────┬────────────────────┬──────────┬──────────┐" << std::endl;
-    std::cout << "│ " << std::left << std::setw(12) << "Автор" << " │ "
-              << std::setw(32) << "Заголовок" << " │ "
-              << std::setw(17) << "Издательство" << " │ "
-              << std::setw(7) << "Год" << " │ "
-              << std::setw(7) << "Страниц" << " │" << std::endl;
+    std::cout << "│ Автор       │ Заголовок                        │ Издательство       │ Год      │ Страниц  │" << std::endl;
     std::cout << "├─────────────┼──────────────────────────────────┼────────────────────┼──────────┼──────────┤" << std::endl;
 
     QueueNode* current = q.front;
@@ -146,23 +130,15 @@ void displayQueue(const Queue& q, const std::string& title) {
             system("clear");
             std::cout << title << std::endl << std::endl;
             std::cout << "┌─────────────┬──────────────────────────────────┬────────────────────┬──────────┬──────────┐" << std::endl;
-            std::cout << "│ " << std::left << std::setw(12) << "Автор" << " │ "
-                      << std::setw(32) << "Заголовок" << " │ "
-                      << std::setw(17) << "Издательство" << " │ "
-                      << std::setw(7) << "Год" << " │ "
-                      << std::setw(7) << "Страниц" << " │" << std::endl;
+            std::cout << "│ Автор       │ Заголовок                        │ Издательство       │ Год      │ Страниц  │" << std::endl;
             std::cout << "├─────────────┼──────────────────────────────────┼────────────────────┼──────────┼──────────┤" << std::endl;
         }
     }
 
     std::cout << "└─────────────┴──────────────────────────────────┴────────────────────┴──────────┴──────────┘" << std::endl;
     
-    std::cout << "\n┌─────────────────────────────────────────────┐\n";
-    std::cout << "│             ИТОГИ ПОИСКА                  │\n";
-    std::cout << "├─────────────────────────────────────────────┤\n";
-    std::cout << "│ Всего найдено записей: " << std::setw(21) << q.size << " │\n";
-    std::cout << "│ Показано записей: " << std::setw(25) << counter << " │\n";
-    std::cout << "└─────────────────────────────────────────────┘\n";
+    std::cout << "\nВсего найдено записей: " << q.size << "\n";
+    std::cout << "Показано записей: " << counter << "\n";
     
     std::cout << "\nНажмите Enter для возврата в меню...";
     std::cin.get();
@@ -175,7 +151,7 @@ void displayMainMenu(const std::vector<Record>& original,
     int choice;
     do {
         system("clear");
-        std::cout << "=== ГЛАВНОЕ МЕНЮ ===\n"
+        std::cout << "Главное меню\n"
                   << "1. Исходная БД\n"
                   << "2. Отсортированная БД\n"
                   << "3. Случайная запись\n"
@@ -184,7 +160,7 @@ void displayMainMenu(const std::vector<Record>& original,
                   << "6. Двоичный поиск по фамилии (первые 3 буквы)\n"
                   << "7. Построить дерево из результатов поиска\n"
                   << "8. Работа с деревом оптимального поиска\n"
-                << "9. Кодирование Шеннона\n"
+                  << "9. Кодирование Шеннона\n"
                   << "0. Выход\n"
                   << "Ваш выбор: ";
         std::cin >> choice;
@@ -193,13 +169,13 @@ void displayMainMenu(const std::vector<Record>& original,
         if (choice == 1) {
             std::vector<Record*> orig_indices;
             for (const auto& rec : original) orig_indices.push_back(const_cast<Record*>(&rec));
-            displayInteractive(orig_indices, "ИСХОДНАЯ БАЗА ДАННЫХ");
+            displayInteractive(orig_indices, "Исходная база данных");
         } 
         else if (choice == 2) {
-            displayInteractive(sorted_indices, "ОТСОРТИРОВАННАЯ БАЗА ДАННЫХ");
+            displayInteractive(sorted_indices, "Отсортированная база данных");
         } 
         else if (choice == 5) {
-            displayAllOnePage(sorted_indices, "ВСЯ ОТСОРТИРОВАННАЯ БАЗА ДАННЫХ ОДНОЙ СТРАНИЦЕЙ");
+            displayAllOnePage(sorted_indices, "Вся отсортированная база данных одной страницей");
         } 
         else if (choice == 3) {
             std::random_device rd;
@@ -208,7 +184,7 @@ void displayMainMenu(const std::vector<Record>& original,
             int idx = dis(gen);
             std::vector<Record*> single = {const_cast<Record*>(&original[idx])};
             system("clear");
-            displayPage(single, 0, 1, "СЛУЧАЙНАЯ ЗАПИСЬ");
+            displayPage(single, 0, 1, "Случайная запись");
             std::cout << "\nНажмите Enter...";
             std::cin.get();
         } 
@@ -220,7 +196,7 @@ void displayMainMenu(const std::vector<Record>& original,
             std::cin.ignore();
             if (num >= 0 && num < original.size()) {
                 std::vector<Record*> single = {const_cast<Record*>(&original[num])};
-                displayPage(single, 0, 1, "ЗАПИСЬ №" + std::to_string(num));
+                displayPage(single, 0, 1, "Запись №" + std::to_string(num));
             } else {
                 std::cout << "Неверный номер!" << std::endl;
             }
@@ -248,7 +224,7 @@ void displayMainMenu(const std::vector<Record>& original,
                 std::cout << "\nНажмите Enter...";
                 std::cin.get();
             } else {
-                displayQueue(*currentQueue, "РЕЗУЛЬТАТЫ ДВОИЧНОГО ПОИСКА (очередь)");
+                displayQueue(*currentQueue, "Результаты двоичного поиска (очередь)");
                 
                 if (optimalTree != nullptr) {
                     clearOptimalTree(optimalTree);

@@ -59,15 +59,11 @@ Queue binarySearchWithIndexing(const std::vector<Record*>& indices, const std::s
         c = toUpperCP866((unsigned char)c);
     }
     
-    std::cout << "\n[ПОИСК] Ищем префикс: '" << target << "'\n";
-    
     int L = 0;
     int R = indices.size() - 1;
-    int comparisons = 0;
     
     while (L < R) {
         int m = (L + R) / 2;
-        comparisons++;
         
         std::string current = getSurnamePrefix(*indices[m]);
         
@@ -82,9 +78,6 @@ Queue binarySearchWithIndexing(const std::vector<Record*>& indices, const std::s
         }
     }
     
-    std::cout << "[ПОИСК] Выполнено сравнений: " << comparisons << "\n";
-    std::cout << "[ПОИСК] Граница найдена на позиции: " << L << "\n";
-    
     if (L >= 0 && L < (int)indices.size()) {
         std::string found = getSurnamePrefix(*indices[L]);
         
@@ -92,13 +85,7 @@ Queue binarySearchWithIndexing(const std::vector<Record*>& indices, const std::s
             c = toUpperCP866((unsigned char)c);
         }
         
-        std::cout << "[ПОИСК] На границе: '" << found.substr(0, 3) << "'\n";
-        
         if (exactMatch(found, target)) {
-            std::cout << "[ПОИСК] Точное совпадение найдено!\n";
-            
-            int queue_size = 0;
-            
             int start = L;
             while (start > 0) {
                 std::string prev = getSurnamePrefix(*indices[start - 1]);
@@ -117,21 +104,12 @@ Queue binarySearchWithIndexing(const std::vector<Record*>& indices, const std::s
                 
                 if (exactMatch(current, target)) {
                     enqueue(resultQueue, indices[i]);
-                    queue_size++;
                 } else {
                     break;
                 }
             }
-            
-            std::cout << "[ОЧЕРЕДЬ] Добавлено записей: " << queue_size << "\n";
-            std::cout << "[ОЧЕРЕДЬ] Размер очереди: " << resultQueue.size << "\n";
-            
-        } else {
-            std::cout << "[ПОИСК] Не найдено! '" << found.substr(0, 3) 
-                     << "' != '" << target << "'\n";
         }
     }
     
-    std::cout << "===============================\n\n";
     return resultQueue;
 }

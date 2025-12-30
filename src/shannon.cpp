@@ -53,13 +53,14 @@ void shannonCoding(const std::string& filename) {
     double avg_length = 0.0;
 
     system("clear");
-    std::cout << "КОДИРОВАНИЕ ШЕННОНА (файл " << filename << ", " << total_bytes << " байт)\n\n";
+    std::cout << "Кодирование Шеннона\n\n";
+    std::cout << "Файл: " << filename << ", " << total_bytes << " байт\n\n";
     std::cout << "Символ  Вероятность    L_i    Кодовое слово\n";
     std::cout << "------  -------------  ----   -------------\n";
 
     for (size_t i = 0; i < symbols.size(); ++i) {
         double p = symbols[i].second;
-        int L = static_cast<int>(std::floor(-std::log2(p)) + 1);  // L_i = ⌊ -log₂ p_i ⌋ + 1 — по лекции
+        int L = static_cast<int>(std::floor(-std::log2(p)) + 1);
         avg_length += p * L;
 
         double q = Q[i];
