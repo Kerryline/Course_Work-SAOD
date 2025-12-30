@@ -10,6 +10,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/coursework.dir/src/queue.cpp.o.d"
   "CMakeFiles/coursework.dir/src/search.cpp.o"
   "CMakeFiles/coursework.dir/src/search.cpp.o.d"
+  "CMakeFiles/coursework.dir/src/shannon.cpp.o"
+  "CMakeFiles/coursework.dir/src/shannon.cpp.o.d"
   "CMakeFiles/coursework.dir/src/sort.cpp.o"
   "CMakeFiles/coursework.dir/src/sort.cpp.o.d"
   "CMakeFiles/coursework.dir/src/tree.cpp.o"

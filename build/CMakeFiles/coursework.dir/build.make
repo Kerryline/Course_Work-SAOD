@@ -128,24 +128,10 @@ CMakeFiles/coursework.dir/src/display.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/coursework.dir/src/display.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kerrline/Course_Work-SAOD/src/display.cpp -o CMakeFiles/coursework.dir/src/display.cpp.s
 
-CMakeFiles/coursework.dir/src/search.cpp.o: CMakeFiles/coursework.dir/flags.make
-CMakeFiles/coursework.dir/src/search.cpp.o: /home/kerrline/Course_Work-SAOD/src/search.cpp
-CMakeFiles/coursework.dir/src/search.cpp.o: CMakeFiles/coursework.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/kerrline/Course_Work-SAOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/coursework.dir/src/search.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/coursework.dir/src/search.cpp.o -MF CMakeFiles/coursework.dir/src/search.cpp.o.d -o CMakeFiles/coursework.dir/src/search.cpp.o -c /home/kerrline/Course_Work-SAOD/src/search.cpp
-
-CMakeFiles/coursework.dir/src/search.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/coursework.dir/src/search.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kerrline/Course_Work-SAOD/src/search.cpp > CMakeFiles/coursework.dir/src/search.cpp.i
-
-CMakeFiles/coursework.dir/src/search.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/coursework.dir/src/search.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kerrline/Course_Work-SAOD/src/search.cpp -o CMakeFiles/coursework.dir/src/search.cpp.s
-
 CMakeFiles/coursework.dir/src/queue.cpp.o: CMakeFiles/coursework.dir/flags.make
 CMakeFiles/coursework.dir/src/queue.cpp.o: /home/kerrline/Course_Work-SAOD/src/queue.cpp
 CMakeFiles/coursework.dir/src/queue.cpp.o: CMakeFiles/coursework.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/kerrline/Course_Work-SAOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/coursework.dir/src/queue.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/kerrline/Course_Work-SAOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/coursework.dir/src/queue.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/coursework.dir/src/queue.cpp.o -MF CMakeFiles/coursework.dir/src/queue.cpp.o.d -o CMakeFiles/coursework.dir/src/queue.cpp.o -c /home/kerrline/Course_Work-SAOD/src/queue.cpp
 
 CMakeFiles/coursework.dir/src/queue.cpp.i: cmake_force
@@ -155,6 +141,20 @@ CMakeFiles/coursework.dir/src/queue.cpp.i: cmake_force
 CMakeFiles/coursework.dir/src/queue.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/coursework.dir/src/queue.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kerrline/Course_Work-SAOD/src/queue.cpp -o CMakeFiles/coursework.dir/src/queue.cpp.s
+
+CMakeFiles/coursework.dir/src/search.cpp.o: CMakeFiles/coursework.dir/flags.make
+CMakeFiles/coursework.dir/src/search.cpp.o: /home/kerrline/Course_Work-SAOD/src/search.cpp
+CMakeFiles/coursework.dir/src/search.cpp.o: CMakeFiles/coursework.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/kerrline/Course_Work-SAOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/coursework.dir/src/search.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/coursework.dir/src/search.cpp.o -MF CMakeFiles/coursework.dir/src/search.cpp.o.d -o CMakeFiles/coursework.dir/src/search.cpp.o -c /home/kerrline/Course_Work-SAOD/src/search.cpp
+
+CMakeFiles/coursework.dir/src/search.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/coursework.dir/src/search.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kerrline/Course_Work-SAOD/src/search.cpp > CMakeFiles/coursework.dir/src/search.cpp.i
+
+CMakeFiles/coursework.dir/src/search.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/coursework.dir/src/search.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kerrline/Course_Work-SAOD/src/search.cpp -o CMakeFiles/coursework.dir/src/search.cpp.s
 
 CMakeFiles/coursework.dir/src/tree.cpp.o: CMakeFiles/coursework.dir/flags.make
 CMakeFiles/coursework.dir/src/tree.cpp.o: /home/kerrline/Course_Work-SAOD/src/tree.cpp
@@ -170,15 +170,30 @@ CMakeFiles/coursework.dir/src/tree.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/coursework.dir/src/tree.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kerrline/Course_Work-SAOD/src/tree.cpp -o CMakeFiles/coursework.dir/src/tree.cpp.s
 
+CMakeFiles/coursework.dir/src/shannon.cpp.o: CMakeFiles/coursework.dir/flags.make
+CMakeFiles/coursework.dir/src/shannon.cpp.o: /home/kerrline/Course_Work-SAOD/src/shannon.cpp
+CMakeFiles/coursework.dir/src/shannon.cpp.o: CMakeFiles/coursework.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/kerrline/Course_Work-SAOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/coursework.dir/src/shannon.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/coursework.dir/src/shannon.cpp.o -MF CMakeFiles/coursework.dir/src/shannon.cpp.o.d -o CMakeFiles/coursework.dir/src/shannon.cpp.o -c /home/kerrline/Course_Work-SAOD/src/shannon.cpp
+
+CMakeFiles/coursework.dir/src/shannon.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/coursework.dir/src/shannon.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kerrline/Course_Work-SAOD/src/shannon.cpp > CMakeFiles/coursework.dir/src/shannon.cpp.i
+
+CMakeFiles/coursework.dir/src/shannon.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/coursework.dir/src/shannon.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kerrline/Course_Work-SAOD/src/shannon.cpp -o CMakeFiles/coursework.dir/src/shannon.cpp.s
+
 # Object files for target coursework
 coursework_OBJECTS = \
 "CMakeFiles/coursework.dir/src/main.cpp.o" \
 "CMakeFiles/coursework.dir/src/database.cpp.o" \
 "CMakeFiles/coursework.dir/src/sort.cpp.o" \
 "CMakeFiles/coursework.dir/src/display.cpp.o" \
-"CMakeFiles/coursework.dir/src/search.cpp.o" \
 "CMakeFiles/coursework.dir/src/queue.cpp.o" \
-"CMakeFiles/coursework.dir/src/tree.cpp.o"
+"CMakeFiles/coursework.dir/src/search.cpp.o" \
+"CMakeFiles/coursework.dir/src/tree.cpp.o" \
+"CMakeFiles/coursework.dir/src/shannon.cpp.o"
 
 # External object files for target coursework
 coursework_EXTERNAL_OBJECTS =
@@ -187,13 +202,14 @@ coursework: CMakeFiles/coursework.dir/src/main.cpp.o
 coursework: CMakeFiles/coursework.dir/src/database.cpp.o
 coursework: CMakeFiles/coursework.dir/src/sort.cpp.o
 coursework: CMakeFiles/coursework.dir/src/display.cpp.o
-coursework: CMakeFiles/coursework.dir/src/search.cpp.o
 coursework: CMakeFiles/coursework.dir/src/queue.cpp.o
+coursework: CMakeFiles/coursework.dir/src/search.cpp.o
 coursework: CMakeFiles/coursework.dir/src/tree.cpp.o
+coursework: CMakeFiles/coursework.dir/src/shannon.cpp.o
 coursework: CMakeFiles/coursework.dir/build.make
 coursework: CMakeFiles/coursework.dir/compiler_depend.ts
 coursework: CMakeFiles/coursework.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/kerrline/Course_Work-SAOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable coursework"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/kerrline/Course_Work-SAOD/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable coursework"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/coursework.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

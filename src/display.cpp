@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include "shannon.h"
 
 void displayPage(const std::vector<Record*>& data, int page, int per_page, const std::string& title) {
     system("clear");
@@ -183,6 +184,7 @@ void displayMainMenu(const std::vector<Record>& original,
                   << "6. Двоичный поиск по фамилии (первые 3 буквы)\n"
                   << "7. Построить дерево из результатов поиска\n"
                   << "8. Работа с деревом оптимального поиска\n"
+                << "9. Кодирование Шеннона\n"
                   << "0. Выход\n"
                   << "Ваш выбор: ";
         std::cin >> choice;
@@ -280,6 +282,10 @@ void displayMainMenu(const std::vector<Record>& original,
             } else {
                 displayOptimalTreeMenu(optimalTree);
             }
+        }
+
+        else if (choice == 9) {
+            shannonCoding("testBase1.dat");
         }
     } while (choice != 0);
 

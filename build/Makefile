@@ -249,6 +249,30 @@ src/search.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/search.cpp.s
 .PHONY : src/search.cpp.s
 
+src/shannon.o: src/shannon.cpp.o
+.PHONY : src/shannon.o
+
+# target to build an object file
+src/shannon.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/shannon.cpp.o
+.PHONY : src/shannon.cpp.o
+
+src/shannon.i: src/shannon.cpp.i
+.PHONY : src/shannon.i
+
+# target to preprocess a source file
+src/shannon.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/shannon.cpp.i
+.PHONY : src/shannon.cpp.i
+
+src/shannon.s: src/shannon.cpp.s
+.PHONY : src/shannon.s
+
+# target to generate assembly for a file
+src/shannon.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/coursework.dir/build.make CMakeFiles/coursework.dir/src/shannon.cpp.s
+.PHONY : src/shannon.cpp.s
+
 src/sort.o: src/sort.cpp.o
 .PHONY : src/sort.o
 
@@ -321,6 +345,9 @@ help:
 	@echo "... src/search.o"
 	@echo "... src/search.i"
 	@echo "... src/search.s"
+	@echo "... src/shannon.o"
+	@echo "... src/shannon.i"
+	@echo "... src/shannon.s"
 	@echo "... src/sort.o"
 	@echo "... src/sort.i"
 	@echo "... src/sort.s"
