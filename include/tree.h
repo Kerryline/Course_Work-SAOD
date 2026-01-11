@@ -24,9 +24,10 @@ struct OptimalSearchTree {
 
 OptimalSearchTree* buildOptimalSearchTreeA1(Queue& queue);
 void printOptimalTree(const OptimalSearchTree* tree);
-void printTreeStructure(TreeNode* root, int depth = 0);
-TreeNode* searchInOptimalTree(OptimalSearchTree* tree, const std::string& key);
-void displayOptimalTreeMenu(OptimalSearchTree* tree);
+std::vector<Record*> searchInTreeByPages(OptimalSearchTree* tree, int pages);
+void displayTreeSearchResults(const std::vector<Record*>& results, int search_pages);
+void displayTreeTraversals(OptimalSearchTree* tree);
 void clearOptimalTree(OptimalSearchTree* tree);
+void inorderTraversalWithRecords(TreeNode* root, std::vector<Record*>& result);
 
 #endif

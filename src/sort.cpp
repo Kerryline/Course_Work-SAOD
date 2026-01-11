@@ -1,5 +1,5 @@
 #include "sort.h"
-
+#include "database.h"
 int partition(std::vector<Record*>& indices, int left, int right) {
     int mid = left + (right - left) / 2;
     Record* pivot_rec = indices[mid];
