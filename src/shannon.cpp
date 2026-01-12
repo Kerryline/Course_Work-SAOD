@@ -7,12 +7,10 @@
 #include <map>
 #include <vector>
 #include <cstring>
-#include <iconv.h>
 
 #define MAX_SYMBOLS 256
 #define MAX_CODE_LEN 256
 
-// Структура как в примере с Хаффманом
 typedef struct {
     unsigned char symbol;
     int freq;
@@ -20,14 +18,11 @@ typedef struct {
     int code_len;
 } SymbolInfo;
 
-// Таблица преобразования CP866 -> читаемый вид
 std::string cp866ToChar(unsigned char c) {
-    // Основные ASCII символы
     if (c >= 32 && c <= 126) {
         return std::string(1, static_cast<char>(c));
     }
     
-    // Русские буквы в CP866
     switch(c) {
         case 128: return "А";
         case 129: return "Б";
@@ -95,7 +90,7 @@ std::string cp866ToChar(unsigned char c) {
         case 239: return "я";
         case 240: return "Ё";
         case 241: return "ё";
-        default: return ""; // Пустая строка для непечатных
+        default: return "";
     }
 }
 
@@ -108,7 +103,6 @@ void shannonCoding(const std::string& filename) {
         return;
     }
 
-    // Читаем весь файл
     file.seekg(0, std::ios::end);
     size_t file_size = file.tellg();
     file.seekg(0, std::ios::beg);
@@ -125,14 +119,12 @@ void shannonCoding(const std::string& filename) {
         return;
     }
 
-    // Подсчет частот
     int freq[MAX_SYMBOLS] = {0};
     for (size_t i = 0; i < file_size; ++i) {
         unsigned char c = static_cast<unsigned char>(buffer[i]);
         freq[c]++;
     }
 
-    // Создаем массив символов
     SymbolInfo symbols[MAX_SYMBOLS];
     int symbol_count = 0;
     
@@ -146,12 +138,10 @@ void shannonCoding(const std::string& filename) {
         }
     }
 
-    // Сортируем по убыванию частот (вероятностей)
     std::sort(symbols, symbols + symbol_count, [](const SymbolInfo& a, const SymbolInfo& b) {
         return a.freq > b.freq;
     });
 
-    // Вычисляем вероятности и кумулятивные суммы
     double* P = new double[symbol_count];
     double* Q = new double[symbol_count + 1];
     
@@ -161,18 +151,15 @@ void shannonCoding(const std::string& filename) {
         Q[i + 1] = Q[i] + P[i];
     }
 
-    // Строим код Шеннона
     double avg_length = 0.0;
     double entropy = 0.0;
     
     for (int i = 0; i < symbol_count; ++i) {
         double p = P[i];
         
-        // Длина кода: L_i = ceil(-log2(p_i))
         int L = static_cast<int>(std::ceil(-std::log2(p)));
         symbols[i].code_len = L;
         
-        // Вычисляем код: первые L бит двоичного представления Q[i]
         double q = Q[i];
         std::string code = "";
         
@@ -186,28 +173,23 @@ void shannonCoding(const std::string& filename) {
             }
         }
         
-        // Копируем код в структуру
         strncpy(symbols[i].code, code.c_str(), MAX_CODE_LEN - 1);
         symbols[i].code[MAX_CODE_LEN - 1] = '\0';
         
-        // Вычисляем среднюю длину и энтропию
         avg_length += p * L;
         if (p > 0.0) {
             entropy -= p * std::log2(p);
         }
     }
 
-    // ОЧИСТКА ЭКРАНА
     system("clear");
 
-    // ВЫВОД ТОЧНО КАК В ПРИМЕРЕ С ХАФФМАНОМ
     std::cout << "╔═════════════════════════════════════════════════════════════════════════╗\n";
     std::cout << "║                     СТАТИЧЕСКОЕ КОДИРОВАНИЕ ШЕННОНА                     ║\n";
     std::cout << "╠═════════════════════════════════════════════════════════════════════════╣\n";
     std::cout << "║ Символ (код)  Частота   Вероятность    Кодовое слово         Длина      ║\n";
     std::cout << "╠═════════════════════════════════════════════════════════════════════════╣\n";
 
-    // Выводим символы
     for (int i = 0; i < symbol_count; ++i) {
         unsigned char c = symbols[i].symbol;
         std::string display = cp866ToChar(c);
@@ -219,7 +201,6 @@ void shannonCoding(const std::string& filename) {
                       << std::setw(20) << symbols[i].code << " "
                       << std::setw(6) << symbols[i].code_len << "    ║\n";
         } else {
-            // Непечатные символы показываем только кодом
             std::cout << "║      (" << std::setw(3) << (int)c << ") "
                       << std::setw(8) << symbols[i].freq << " "
                       << std::setw(14) << std::fixed << std::setprecision(6) << P[i] << " "
@@ -228,7 +209,6 @@ void shannonCoding(const std::string& filename) {
         }
     }
 
-    // Итоговая информация
     double prob_sum = 0.0;
     for (int i = 0; i < symbol_count; ++i) {
         prob_sum += P[i];
@@ -244,7 +224,6 @@ void shannonCoding(const std::string& filename) {
     std::cout << "\nНажмите Enter для возврата в меню...";
     std::cin.get();
 
-    // Очистка памяти
     delete[] buffer;
     delete[] P;
     delete[] Q;
