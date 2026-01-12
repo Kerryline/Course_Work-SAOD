@@ -1391,6 +1391,7 @@ CMakeFiles/coursework.dir/src/shannon.cpp.o: /home/kerrline/Course_Work-SAOD/src
   /usr/include/c++/15/cstddef \
   /usr/include/c++/15/cstdio \
   /usr/include/c++/15/cstdlib \
+  /usr/include/c++/15/cstring \
   /usr/include/c++/15/ctime \
   /usr/include/c++/15/cwchar \
   /usr/include/c++/15/cwctype \
@@ -1475,6 +1476,8 @@ CMakeFiles/coursework.dir/src/shannon.cpp.o: /home/kerrline/Course_Work-SAOD/src
   /usr/include/stdc-predef.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/single_threaded.h \
